@@ -47,6 +47,8 @@ services:
       - user
       - root_user
       - db_name
+    expose:
+      - "3306"
 
   redis:
     build: requirements/bonus/redis/.
@@ -75,8 +77,8 @@ services:
     build: requirements/bonus/adminer/.
     restart: unless-stopped
     container_name: adminer
-    expose:
-      - "8080"
+    ports:
+       - "8080:8080"
     networks:
       - inception
 
@@ -98,10 +100,10 @@ services:
     expose:
         - "8080"
     volumes:
-      - ../../kkuhn/data/cadvisor:/rootfs:ro
-      - ../../kkuhn/data/var/run:/var/run:ro
-      - ../../kkuhn/data/sys:/sys:ro
-      - ../../kkuhn/data/var/lib/docker/:/var/lib/docker:ro
+        - /:/rootfs:ro
+        - /var/run:/var/run:ro
+        - /sys:/sys:ro
+        - /var/lib/docker:/var/lib/docker:ro
     restart: unless-stopped
     networks:
       - inception
