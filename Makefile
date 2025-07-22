@@ -8,11 +8,11 @@ NGINX_DIR := /home/$(USER)/data/requirements/nginx/ssl
 all: set_up_volume generate_ssl_certificates up
 
 set_up_volume:
-        @echo "Erstelle Verzeichnisse für MariaDB und WordPress..."
-        @mkdir -p $(MYSQL_DIR)
-        @mkdir -p $(WORDPRESS_DIR)
-		@mkdir -p $(NGINX_DIR)
-        @echo "Verzeichnisse erstellt!"
+	@echo "Erstelle Verzeichnisse für MariaDB und WordPress..."
+	@mkdir -p $(MYSQL_DIR)
+	@mkdir -p $(WORDPRESS_DIR)
+	@mkdir -p $(NGINX_DIR)
+	@echo "Verzeichnisse erstellt!"
 
 generate_ssl_certificates:
 	@echo "Erstelle SSL-Zertifikate für NGINX..."
