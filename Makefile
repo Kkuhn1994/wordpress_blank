@@ -5,6 +5,9 @@ MYSQL_DIR := /home/$(USER)/data/mysql
 WORDPRESS_DIR := /home/$(USER)/data/wordpress
 NGINX_DIR := /home/$(USER)/data/requirements/nginx/ssl
 
+USER_NAME := $(shell whoami)
+
+
 all: set_up_volume generate_ssl_certificates up
 
 set_up_volume:
@@ -24,6 +27,7 @@ generate_ssl_certificates:
 
 # Standardbefehl: Container starten
 up:
+	@export USER_NAME=$(USER_NAME)
 	$(DOCKER_COMPOSE) -f $(COMPOSE_FILE) up --build -d
 
 
