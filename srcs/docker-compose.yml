@@ -11,8 +11,8 @@ services:
     ports:
       - "443:443"
     volumes:
-      - ../../kkuhn/data/web:/var/www/html
-      - ../../kkuhn/data/requirements/nginx/ssl:/etc/nginx/ssl:ro
+      - wordpress:/var/www/html
+      - nginx:/etc/nginx/ssl:ro
     networks:
       - inception
 
@@ -23,7 +23,7 @@ services:
     depends_on:
       - mariadb
     volumes:
-      - ../../kkuhn/data/web/wp-content:/var/www/html/wp-content
+      - wordpress/wp-content:/var/www/html/wp-content
     networks:
       - inception
     secrets:
@@ -42,7 +42,7 @@ services:
     networks:
       - inception
     volumes:
-      - ../../kkuhn/data/db:/var/lib/mysql
+      - mariadb:/var/lib/mysql
     secrets:
       - password
       - root_password
@@ -113,6 +113,24 @@ services:
 networks:
   inception:
     driver : bridge
+
+volumes:
+  mariadb:
+    driver_opts:
+      type: 'none'
+      o: bind
+      device: /home/${USER_NAME}/data/db
+  wordpress:
+    driver_opts:
+      type: 'none'
+      o: bind
+      device: /home/${USER_NAME}/data/web
+  nginx:
+    driver_opts:
+      type: 'none'
+      o: bind
+      device: /home/${USER_NAME}/data/requirements/nginx/ssl
+
 
 secrets:
   password:
