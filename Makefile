@@ -1,19 +1,23 @@
+
 # Variablen
 DOCKER_COMPOSE = docker-compose
 COMPOSE_FILE = srcs/docker-compose.yml
-MYSQL_DIR := /home/$(USER)/data/mysql
-WORDPRESS_DIR := /home/$(USER)/data/wordpress
+MYSQL_DIR := /home/$(USER)/data/db
+WORDPRESS_CON := /home/$(USER)/data/web/wp-content
+WORDPRESS_DIR := /home/$(USER)/data/web
 NGINX_DIR := /home/$(USER)/data/requirements/nginx/ssl
 
-USER_NAME := $(shell whoami)
+USER_NAME := $(USER)
 
 
 all: set_up_volume generate_ssl_certificates up
 
 set_up_volume:
 	@echo "Erstelle Verzeichnisse für MariaDB und WordPress..."
+	@echo $(USER_NAME)
 	@mkdir -p $(MYSQL_DIR)
 	@mkdir -p $(WORDPRESS_DIR)
+	@mkdir -p $(WORDPRESS_CON)
 	@mkdir -p $(NGINX_DIR)
 	@echo "Verzeichnisse erstellt!"
 
@@ -27,8 +31,7 @@ generate_ssl_certificates:
 
 # Standardbefehl: Container starten
 up:
-	@export USER_NAME=$(USER_NAME)
-	$(DOCKER_COMPOSE) -f $(COMPOSE_FILE) up --build -d
+	@export USER_NAME=$(USER_NAME) && $(DOCKER_COMPOSE) -f $(COMPOSE_FILE) up --build -d
 
 
 

@@ -23,7 +23,7 @@ services:
     depends_on:
       - mariadb
     volumes:
-      - wordpress/wp-content:/var/www/html/wp-content
+      - wordpress_content:/var/www/html/wp-content
     networks:
       - inception
     secrets:
@@ -125,6 +125,11 @@ volumes:
       type: 'none'
       o: bind
       device: /home/${USER_NAME}/data/web
+  wordpress_content:
+    driver_opts:
+      type: 'none'
+      o: bind
+      device: /home/${USER_NAME}/data/web/wp-content
   nginx:
     driver_opts:
       type: 'none'
