@@ -1,11 +1,11 @@
 
 # Variablen
-DOCKER_COMPOSE = docker-compose
+DOCKER_COMPOSE = docker compose
 COMPOSE_FILE = srcs/docker-compose.yml
 MYSQL_DIR := /home/$(USER)/data/db
 WORDPRESS_CON := /home/$(USER)/data/web/wp-content
 WORDPRESS_DIR := /home/$(USER)/data/web
-NGINX_DIR := /home/$(USER)/data/requirements/nginx/ssl
+NGINX_DIR := /home/$(USER)/data/requirements/nginx
 
 USER_NAME := $(USER)
 
@@ -25,7 +25,12 @@ generate_ssl_certificates:
 	@echo "Erstelle SSL-Zertifikate für NGINX..."
 	@openssl req -newkey rsa:2048 -nodes -keyout $(NGINX_DIR)/server.key -out $(NGINX_DIR)/server.csr -subj "/CN=localhost"
 	@openssl x509 -req -days 365 -in $(NGINX_DIR)/server.csr -signkey $(NGINX_DIR)/server.key -out $(NGINX_DIR)/server.crt
-	@echo "SSL-Zertifikate erstellt!"
+	@chmod 600 $(NGINX_DIR)/server.key
+	@chmod 644 $(NGINX_DIR)/server.crt
+	@chown root:root $(NGINX_DIR)/server.key $(NGINX_DIR)/server.crt
+	@echo "SSL-Zertifikate erstellt und Berechtigungen gesetzt!"
+
+
 
 
 

@@ -67,7 +67,7 @@ services:
     container_name: ftp
     restart: unless-stopped
     volumes:
-      - ../../kkuhn/data/web:/home/kkuhn/www
+      - wordpress:/home/kkuhn/www
     ports:
       - "21:21"
       - "30000-30010:30000-30010"
@@ -131,10 +131,11 @@ volumes:
       o: bind
       device: /home/${USER_NAME}/data/web/wp-content
   nginx:
+    driver: local
     driver_opts:
       type: 'none'
       o: bind
-      device: /home/${USER_NAME}/data/requirements/nginx/ssl
+      device: /home/${USER_NAME}/data/requirements/nginx
 
 
 secrets:
@@ -148,3 +149,4 @@ secrets:
     file: ../secrets/root_user
   db_name:
     file: ../secrets/db_name
+
