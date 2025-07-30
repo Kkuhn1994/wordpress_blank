@@ -10,7 +10,7 @@ NGINX_DIR := /home/$(USER)/data/requirements/nginx
 USER_NAME := $(USER)
 
 
-all: set_up_volume generate_ssl_certificates up
+all: set_up_volume up
 
 set_up_volume:
 	@echo "Erstelle Verzeichnisse für MariaDB und WordPress..."
