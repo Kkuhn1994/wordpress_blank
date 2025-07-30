@@ -10,7 +10,14 @@ NGINX_DIR := /home/$(USER)/data/requirements/nginx
 USER_NAME := $(USER)
 
 
-all: set_up_volume up
+all: set_up_volume set_up_hosts up
+
+set_up_hosts:
+	@if ! grep -q "kkuhn.42.fr" /etc/hosts; then \
+		echo "127.0.0.1 kkuhn.42.fr" | sudo tee -a /etc/hosts; \
+	else \
+		echo "kkuhn.42.fr already in /etc/hosts"; \
+	fi
 
 set_up_volume:
 	@echo "Erstelle Verzeichnisse für MariaDB und WordPress..."
