@@ -26,21 +26,7 @@ set_up_volume:
 	@mkdir -p $(WORDPRESS_DIR)
 	@mkdir -p $(WORDPRESS_CON)
 	@mkdir -p $(NGINX_DIR)
-	@chown -R $(USER_NAME):$(USER_NAME) $(NGINX_DIR)
 	@echo "Verzeichnisse erstellt!"
-
-generate_ssl_certificates:
-	@echo "Erstelle SSL-Zertifikate für NGINX..."
-	@openssl req -newkey rsa:2048 -nodes -keyout $(NGINX_DIR)/server.key -out $(NGINX_DIR)/server.csr -subj "/CN=localhost"
-	@openssl x509 -req -days 365 -in $(NGINX_DIR)/server.csr -signkey $(NGINX_DIR)/server.key -out $(NGINX_DIR)/server.crt
-	@sudo chown -R kkuhn:kkuhn /home/kkuhn/data/requirements/nginx
-
-	@sudo chmod 600 $(NGINX_DIR)/server.key
-	@sudo chmod 644 $(NGINX_DIR)/server.crt
-	@echo "SSL-Zertifikate erstellt und Berechtigungen gesetzt!"
-
-
-
 
 
 # Standardbefehl: Container starten

@@ -68,6 +68,8 @@ services:
     restart: unless-stopped
     volumes:
       - wordpress:/home/kkuhn/www
+    secrets:
+      - root_password
     ports:
       - "21:21"
       - "30000-30010:30000-30010"
@@ -116,20 +118,8 @@ networks:
 
 volumes:
   mariadb:
-    driver_opts:
-      type: 'none'
-      o: bind
-      device: /home/${USER_NAME}/data/db
   wordpress:
-    driver_opts:
-      type: 'none'
-      o: bind
-      device: /home/${USER_NAME}/data/web
   wordpress_content:
-    driver_opts:
-      type: 'none'
-      o: bind
-      device: /home/${USER_NAME}/data/web/wp-content
   nginx:
     driver: local
     driver_opts:
@@ -149,4 +139,3 @@ secrets:
     file: ../secrets/root_user
   db_name:
     file: ../secrets/db_name
-
