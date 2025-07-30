@@ -11,7 +11,7 @@ services:
     ports:
       - "443:443"
     volumes:
-      - wordpress:/var/www/html
+      - wordpress_content:/var/www/html
       - nginx:/etc/nginx/ssl:ro
     networks:
       - inception
@@ -23,7 +23,7 @@ services:
     depends_on:
       - mariadb
     volumes:
-      - wordpress_content:/var/www/html/wp-content
+      - wordpress_content:/var/www/html
     networks:
       - inception
     secrets:
