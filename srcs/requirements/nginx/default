@@ -70,27 +70,6 @@ server {
 
 	server_name localhost;
 
-	# location /adminer/ {
-	# 	# Forward the request to Adminer running on port 8080
-	# 	proxy_pass http://adminer:8080/;
-
-	# 	# Remove the /adminer prefix before forwarding the request to Adminer
-	# 	rewrite ^/adminer(/.*)$ $1 break;
-
-	# 	# Forward the original headers to Adminer
-	# 	proxy_set_header Host $host;
-	# 	proxy_set_header X-Real-IP $remote_addr;  # Real client IP
-	# 	proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;  # Forwarded client IPs
-	# 	proxy_set_header X-Forwarded-Proto $scheme;  # Forward the protocol (http or https)
-	# 	proxy_set_header X-Forwarded-Port $server_port;  # Forward the original port
-	# 	proxy_set_header X-Forwarded-Host $host;  # Forward the original host
-
-	# 	# Handle redirects from Adminer and ensure they stay within the /adminer path
-	# 	# Instead of using localhost, use the internal container name (adminer) or the proper container address
-	# 	proxy_redirect http://adminer:8080/ /adminer/;  # Redirects from adminer container to /adminer/
-	# 	proxy_redirect http://adminer/ /adminer/;  # If redirects from localhost are seen
-	# }
-
 
     location / {
         try_files $uri $uri/ /index.php?$args;  # WordPress-spezifische Weiterleitung
@@ -123,20 +102,34 @@ server {
     }
 	# pass PHP scripts to FastCGI server
 	#
-    # location /adminer {
-	# 	rewrite ^/adminer/(.*)$ adminer.php last;
-    #     proxy_pass http://adminer:8080;  # Weiterleitung an Adminer-Container
-    #     proxy_set_header Host $host;
-    #     proxy_set_header X-Real-IP $remote_addr;
-    #     proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-    #     proxy_set_header X-Forwarded-Proto $scheme;
-    # }
-#	location /adminer/ {		proxy_pass http://adminer:8080/adminer.php;
+#	location /adminer/ {		
+#		proxy_pass http://adminer:8080/;
+#		rewrite ^/adminer(/.*)$ $1 break;
+#
 #		proxy_set_header Host $host;
 #		proxy_set_header X-Real-IP $remote_addr;
 #		proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
 #		proxy_set_header X-Forwarded-Proto $scheme;
 #	}
+
+	#location /adminer/ {		
+	#	proxy_pass http://adminer:8080/adminer.php;
+	#	proxy_set_header Host $host;
+	#	proxy_set_header X-Real-IP $remote_addr;
+	#	proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+	#	proxy_set_header X-Forwarded-Proto $scheme;
+	#}
+location = /adminer {
+    return 302 /adminer.php;
+}
+
+location = /adminer.php {
+    proxy_pass http://adminer:8080/adminer.php;
+    proxy_set_header Host $host;
+    proxy_set_header X-Real-IP $remote_addr;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header X-Forwarded-Proto $scheme;
+}
 
     location ^~ /cadvisor/ {
         proxy_pass       http://cadvisor:8080/;
