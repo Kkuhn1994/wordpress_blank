@@ -5,6 +5,7 @@ COMPOSE_FILE = srcs/docker-compose.yml
 MYSQL_DIR := /home/$(USER)/data/db
 WORDPRESS_CON := /home/$(USER)/data/web/wp-content
 WORDPRESS_DIR := /home/$(USER)/data/web
+FTP_DIR := /home/$(USER)/data/ftp
 NGINX_DIR := /home/$(USER)/data/requirements/nginx
 
 USER_NAME := $(USER)
@@ -25,6 +26,7 @@ set_up_volume:
 	@mkdir -p $(MYSQL_DIR)
 	@mkdir -p $(WORDPRESS_DIR)
 	@mkdir -p $(WORDPRESS_CON)
+	@mkdir -p $(FTP_DIR)
 	@mkdir -p $(NGINX_DIR)
 	@echo "Verzeichnisse erstellt!"
 
@@ -50,6 +52,7 @@ build:
 # Alle Container, Netzwerke und Volumes entfernen (vorsichtig verwenden!)
 clean:
 	$(DOCKER_COMPOSE) -f $(COMPOSE_FILE) down -v
+	sudo rm -rf ../data
 
 # Hilfe anzeigen
 help:

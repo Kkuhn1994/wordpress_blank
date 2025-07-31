@@ -67,7 +67,7 @@ services:
     container_name: ftp
     restart: unless-stopped
     volumes:
-      - wordpress:/home/kkuhn/www
+      - ftp:/home/ftpuser
     secrets:
       - root_password
     ports:
@@ -110,7 +110,7 @@ services:
         - /var/lib/docker:/var/lib/docker:ro
     restart: unless-stopped
     networks:
-      - inception
+        - inception
 
 networks:
   inception:
@@ -118,14 +118,32 @@ networks:
 
 volumes:
   mariadb:
+    driver_opts:
+      type: 'none'
+      o: bind
+      device: /home/${USER_NAME}/data/db
   wordpress:
+    driver_opts:
+      type: 'none'
+      o: bind
+      device: /home/${USER_NAME}/data/web
   wordpress_content:
+    driver_opts:
+      type: 'none'
+      o: bind
+      device: /home/${USER_NAME}/data/web/wp-content
   nginx:
     driver: local
     driver_opts:
       type: 'none'
       o: bind
       device: /home/${USER_NAME}/data/requirements/nginx
+  ftp:
+    driver: local
+    driver_opts:
+      type: 'none'
+      o: bind
+      device: /home/${USER_NAME}/data/ftp
 
 
 secrets:
