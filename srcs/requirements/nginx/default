@@ -75,23 +75,7 @@ server {
         try_files $uri $uri/ /index.php?$args;  # WordPress-spezifische Weiterleitung
     }
 
-    location ^~ /cadvisor/containers/ {
-        proxy_pass       http://cadvisor:8080/containers/;
-        proxy_set_header Host               $host;
-        proxy_set_header X-Real-IP          $remote_addr;
-        proxy_set_header X-Forwarded-For    $proxy_add_x_forwarded_for;
-        proxy_set_header X-Forwarded-Proto  https;
-        proxy_read_timeout                   300;
-    }
-	
-    location ^~ /cadvisor/static/ {
-        proxy_pass       http://cadvisor:8080/static/;
-        proxy_set_header Host             $host;
-        proxy_set_header X-Real-IP        $remote_addr;
-        proxy_set_header X-Forwarded-For  $proxy_add_x_forwarded_for;
-        proxy_set_header X-Forwarded-Proto https;
-        proxy_read_timeout 300;
-    }
+   
 
     # PHP-Dateien verarbeiten
     location ~ \.php$ {
@@ -119,45 +103,9 @@ server {
 	#	proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
 	#	proxy_set_header X-Forwarded-Proto $scheme;
 	#}
-location = /adminer {
-    return 302 /adminer.php;
-}
 
-location = /adminer.php {
-    proxy_pass http://adminer:8080/adminer.php;
-    proxy_set_header Host $host;
-    proxy_set_header X-Real-IP $remote_addr;
-    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-    proxy_set_header X-Forwarded-Proto $scheme;
-}
 
-    location ^~ /cadvisor/ {
-        proxy_pass       http://cadvisor:8080/;
-        proxy_set_header Host               $host;
-        proxy_set_header X-Real-IP          $remote_addr;
-        proxy_set_header X-Forwarded-For    $proxy_add_x_forwarded_for;
-        proxy_set_header X-Forwarded-Proto  https;
-        proxy_set_header Accept-Encoding    "";
-        
-        proxy_redirect   http://cadvisor:8080/   /cadvisor/;
-        proxy_redirect   /                      /cadvisor/;
 
-        # <base> im <head> – nur wenn noch nötig
-        sub_filter_types text/html;
-        sub_filter '<head>' '<head><base href="/cadvisor/">';
-        sub_filter_once on;
-
-        proxy_cookie_path /   /cadvisor/;
-        proxy_read_timeout 300;
-    }
-
-	location /website {
-		proxy_pass http://static_site:81/;
-		proxy_set_header Host $host;
-		proxy_set_header X-Real-IP $remote_addr;
-		proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-		proxy_set_header X-Forwarded-Proto $scheme;
-	}
 
 	# Weiterleitung von statischen Dateien
 	location ~* \.(css|js|jpg|jpeg|png|gif|ico|svg|woff|woff2)$ {
