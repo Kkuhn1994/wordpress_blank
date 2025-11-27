@@ -52,65 +52,6 @@ services:
     expose:
       - "3306"
 
-  redis:
-    build: requirements/bonus/redis/.
-    container_name: redis
-    restart: unless-stopped
-    command: redis-server --protected-mode no
-    expose:
-      - "6379"
-    networks:
-      - inception
-
-  ftp:
-    build: requirements/bonus/ftp/.
-    container_name: ftp
-    restart: unless-stopped
-    volumes:
-      - ftp:/home/ftpuser
-    secrets:
-      - root_password
-    ports:
-      - "21:21"
-      - "30000-30010:30000-30010"
-    networks:
-      - inception
-    privileged: true
-
-  adminer:
-    build: requirements/bonus/adminer/.
-    restart: unless-stopped
-    container_name: adminer
-    expose:
-       - "8080"
-    networks:
-      - inception
-
-  static_site:
-    build: requirements/bonus/static_website/.
-    restart: unless-stopped
-    container_name: static_site
-    expose:
-      - "81"
-    networks:
-      - inception
-
-  cadvisor:
-    build:
-      context: requirements/bonus/cadvisor/.
-      args:
-        - CADVISOR_VERSION=v0.52.1
-    container_name: cadvisor
-    expose:
-        - "8080"
-    volumes:
-        - /:/rootfs:ro
-        - /var/run:/var/run:ro
-        - /sys:/sys:ro
-        - /var/lib/docker:/var/lib/docker:ro
-    restart: unless-stopped
-    networks:
-        - inception
 
 networks:
   inception:
@@ -138,12 +79,6 @@ volumes:
       type: 'none'
       o: bind
       device: /home/${USER_NAME}/data/requirements/nginx
-  ftp:
-    driver: local
-    driver_opts:
-      type: 'none'
-      o: bind
-      device: /home/${USER_NAME}/data/ftp
 
 
 secrets:
